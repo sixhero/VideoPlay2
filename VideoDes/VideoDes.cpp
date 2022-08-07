@@ -12,7 +12,6 @@ std::string VideoDes::getSourceUrl()
 {
     return m_source_url;
 }
-
 void VideoDes::setSourceUrl(const std::string url)
 {
     m_source_url = url;
@@ -175,10 +174,13 @@ int VideoDes::InitVideoDes()
     m_video_width = m_av_video_code_context->width;
     m_video_height = m_av_video_code_context->height;
 
+    //启动解码线程
+    decode_thread = std::thread(&VideoDes::Decoder,this);
+    decode_thread.detach(); //分离线程
     return 0;
 }
 
-int VideoDes::AVDecode(const uint8_t *databuff, const int *bufflen)
+int VideoDes::AVDecode()
 {
     //开始读取数据源的数据包
     int ret = av_read_frame(m_av_format_context, m_av_packet);
@@ -192,6 +194,7 @@ int VideoDes::AVDecode(const uint8_t *databuff, const int *bufflen)
     //解码视频数据包
     if (m_av_packet->stream_index == m_video_index)
     {
+        VideoData video_data;
         //发送数据包到视频解码器上下文
         ret = avcodec_send_packet(m_av_video_code_context, m_av_packet);
         if (ret < 0)
@@ -210,8 +213,12 @@ int VideoDes::AVDecode(const uint8_t *databuff, const int *bufflen)
             goto END;
         }
 
+        //自定义的视频数据
+        video_data._data = new uint8_t[m_video_height * m_video_width * 4];
+        video_data.size = m_video_height * m_video_width * 4;
+        video_data.pts = m_av_frame_src->pts;
         //初始化目的帧绑定数据缓冲
-        ret = av_image_fill_arrays(m_av_frame_dest->data, m_av_frame_dest->linesize, databuff, AV_PIX_FMT_RGB32, m_video_width, m_video_height, 4);
+        ret = av_image_fill_arrays(m_av_frame_dest->data, m_av_frame_dest->linesize, video_data._data, AV_PIX_FMT_RGB32, m_video_width, m_video_height, 4);
         if (ret < 0)
         {
             m_logger->warn(std::string("绑定目的帧数据缓冲失败 ") + av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret));
@@ -228,6 +235,7 @@ int VideoDes::AVDecode(const uint8_t *databuff, const int *bufflen)
             goto END;
         }
         //视频数据样式
+        queue_video_data.push(video_data);
         ret = 0;
         goto END;
     }
@@ -249,4 +257,20 @@ END:
         m_logger->info("提取音频数据成功");
     }
     return ret;
+}
+
+void VideoDes::Decoder()
+{
+    while (true)
+    {
+        //这个判断方式有点扯淡
+        if (queue_audio_data.size() < MAX_QUEUE_SIZE || queue_video_data.size() < MAX_QUEUE_SIZE)
+        {
+            AVDecode();
+        }
+        else
+        {
+            Sleep(5);
+        }
+    }
 }

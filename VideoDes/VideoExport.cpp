@@ -32,7 +32,7 @@ int API_EXPORT GetAVHandleHeight(AVHandle av_handle)
 int API_EXPORT AVHandleDecode(AVHandle av_handle, const uint8_t* databuff, const int* bufflen)
 {
 	VideoDes* video_des = (VideoDes*)av_handle;
-	return video_des->AVDecode(databuff, bufflen);
+	return video_des->AVDecode();
 }
 
 

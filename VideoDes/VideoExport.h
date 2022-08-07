@@ -12,6 +12,7 @@
 #define API_EXPORT 
 #endif
 
+ /// @brief 解码器句柄
 typedef void * AVHandle;
 
 extern "C"
