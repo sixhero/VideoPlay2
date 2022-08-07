@@ -4,7 +4,7 @@ VideoDes::VideoDes()
 {
     //初始化日志库
     m_logger = spdlog::stdout_color_mt("VideoDes");
-    m_logger->info("对象初始化");
+    m_logger->info("对象初始化 ");
     // setSourceUrl("D:/Download/阿拉涅的虫笼.mp4");
 }
 
@@ -27,7 +27,7 @@ int VideoDes::getVideoHeight() const
 int VideoDes::InitVideoDes()
 {
     m_logger->info("初始化解码器");
-    m_logger->info("设置优化参数，对视频源设置固有属性");
+    m_logger->info("设置优化参数，对视频源设置固有属性 ");
     //设置优化参数，对视频源设置固有属性
     av_dict_set(&m_av_dictionary, "rtsp_transpot", "+udp+tcp", 0);
     av_dict_set(&m_av_dictionary, "rtsp_flage", "+prefer_tcp", 0);
@@ -50,7 +50,7 @@ int VideoDes::InitVideoDes()
         return -2;
     }
 
-    m_logger->info(std::string("数据源地址：") + getSourceUrl());
+    m_logger->info(std::string("数据源地址:") + getSourceUrl());
 
     //查找视频源的流信息
     ret = avformat_find_stream_info(m_av_format_context, nullptr);
@@ -264,7 +264,7 @@ void VideoDes::Decoder()
     while (true)
     {
         //这个判断方式有点扯淡
-        if (queue_audio_data.size() < MAX_QUEUE_SIZE || queue_video_data.size() < MAX_QUEUE_SIZE)
+        if (queue_video_data.size() < MAX_QUEUE_SIZE)
         {
             AVDecode();
         }
