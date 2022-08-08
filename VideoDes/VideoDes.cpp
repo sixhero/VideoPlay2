@@ -270,7 +270,11 @@ void VideoDes::Decoder()
         }
         else
         {
+#ifdef __WIN32
             Sleep(5);
+#elif __linux__
+            sleep(5);
+#endif
         }
     }
 }

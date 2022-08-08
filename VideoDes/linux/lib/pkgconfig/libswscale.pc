@@ -1,0 +1,14 @@
+prefix=/home/sixhero/c++/ffmpeg-5.1-Riemann/ffmpeg-5.1/../out
+exec_prefix=${prefix}
+libdir=/home/sixhero/c++/ffmpeg-5.1-Riemann/ffmpeg-5.1/../out/lib
+includedir=/home/sixhero/c++/ffmpeg-5.1-Riemann/ffmpeg-5.1/../out/include
+
+Name: libswscale
+Description: FFmpeg image rescaling library
+Version: 6.7.100
+Requires: 
+Requires.private: libavutil >= 57.28.100
+Conflicts:
+Libs: -L${libdir}  -lswscale 
+Libs.private: -lm -latomic
+Cflags: -I${includedir}

@@ -1,0 +1,14 @@
+prefix=/home/sixhero/c++/ffmpeg-5.1-Riemann/ffmpeg-5.1/../out
+exec_prefix=${prefix}
+libdir=/home/sixhero/c++/ffmpeg-5.1-Riemann/ffmpeg-5.1/../out/lib
+includedir=/home/sixhero/c++/ffmpeg-5.1-Riemann/ffmpeg-5.1/../out/include
+
+Name: libavformat
+Description: FFmpeg container format library
+Version: 59.27.100
+Requires: 
+Requires.private: libavcodec >= 59.37.100, libswresample >= 4.7.100, libavutil >= 57.28.100
+Conflicts:
+Libs: -L${libdir}  -lavformat 
+Libs.private: -lm -latomic -lz
+Cflags: -I${includedir}
