@@ -175,7 +175,7 @@ int VideoDes::InitVideoDes()
     m_video_height = m_av_video_code_context->height;
 
     //启动解码线程
-    decode_thread = std::thread(&VideoDes::Decoder,this);
+    decode_thread = std::thread(&VideoDes::Decoder, this);
     decode_thread.detach(); //分离线程
     return 0;
 }
@@ -257,6 +257,18 @@ END:
         m_logger->info("提取音频数据成功");
     }
     return ret;
+}
+
+VideoData *VideoDes::GetVideoData()
+{
+    if(queue_video_data.size()<=0)
+    {
+        return nullptr;
+    }
+    _VideoData video_data = new VideoData();
+    *video_data = queue_video_data.front();
+    queue_video_data.pop();
+    return video_data;
 }
 
 void VideoDes::Decoder()

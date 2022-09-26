@@ -30,7 +30,7 @@ extern "C"
 #include <queue>
 #include <thread>
 
-#define MAX_QUEUE_SIZE 4
+#define MAX_QUEUE_SIZE 8
 
 /// @brief 视频解码后的视频结构体
 typedef struct
@@ -83,6 +83,10 @@ public:
 	/// @param bufflen 数据缓冲大小尺寸
 	/// @return 负数 解码失败，0 视频数据，1 音频数据
 	int AVDecode();
+
+	/// @brief 获取视频队列的数据
+	/// @return 返回一个视频数据结构
+	VideoData *GetVideoData();
 
 private:
 	/// @brief 快速日志句柄
@@ -149,6 +153,7 @@ private:
 	/// @brief 数据原解码线程
 	std::thread decode_thread;
 
+	/// @brief 视频解码器
 	void Decoder();
 };
 

@@ -37,12 +37,14 @@ extern "C"
 	/// @return 解码器的图像高度
 	int API_EXPORT GetAVHandleHeight(AVHandle av_handle);
 
-	/// @brief 解码函数操作
+	/// @brief 获取队列缓存的视频数据
 	/// @param av_handle 
 	/// @param databuff 数据缓冲，由调用者提供
 	/// @param bufflen 数据缓冲大小，由调用者提供
-	/// @return 0 视频数据类型，1 音频数据类型，负值 错误码
-	int API_EXPORT AVHandleDecode(AVHandle av_handle, const uint8_t* databuff, const int* bufflen);
+	/// @return 是否成功获取到视频数据
+	bool API_EXPORT AVHandleGetVideoData(AVHandle av_handle, uint8_t* databuff, int64_t* bufflen,int64_t *pts);
+
+
 }
 
 #endif
