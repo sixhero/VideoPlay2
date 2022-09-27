@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22.0)
 
-project(VideoPlay CXX)
+project(VideoPlay CXX C)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
@@ -11,3 +11,5 @@ add_subdirectory(module)
 add_subdirectory(VideoDes)
 #主程序
 add_subdirectory(VideoPlay)
+#OpenGL的视频展示器
+add_subdirectory(VideoGL)

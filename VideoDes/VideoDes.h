@@ -84,7 +84,7 @@ public:
 	/// @return 负数 解码失败，0 视频数据，1 音频数据
 	int AVDecode();
 
-	/// @brief 获取视频队列的数据
+	/// @brief 获取视频队列的数据，该函数获取成功会申请VideoData内存结构
 	/// @return 返回一个视频数据结构
 	VideoData *GetVideoData();
 
