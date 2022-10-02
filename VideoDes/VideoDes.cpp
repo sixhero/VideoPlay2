@@ -4,7 +4,7 @@ VideoDes::VideoDes()
 {
     //初始化日志库
     m_logger = spdlog::stdout_color_mt("VideoDes");
-    m_logger->info("对象初始化 ");
+    m_logger->info("VideoDes对象初始化 ");
     // setSourceUrl("D:/Download/阿拉涅的虫笼.mp4");
 }
 
@@ -194,13 +194,14 @@ int VideoDes::AVDecode()
     //解码视频数据包
     if (m_av_packet->stream_index == m_video_index)
     {
-        VideoData video_data;
+        _VideoData video_data = new VideoData;
         //发送数据包到视频解码器上下文
         ret = avcodec_send_packet(m_av_video_code_context, m_av_packet);
         if (ret < 0)
         {
             m_logger->warn(std::string("发送数据包到视频解码器上下文失败 ") + av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret));
             ret = -2;
+            delete video_data;
             goto END;
         }
 
@@ -210,19 +211,24 @@ int VideoDes::AVDecode()
         {
             m_logger->warn(std::string("接收视频解码器输出的数据帧不可用 ") + av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret));
             ret = -3;
+            delete video_data;
             goto END;
         }
 
         //自定义的视频数据
-        video_data._data = new uint8_t[m_video_height * m_video_width * 4];
-        video_data.size = m_video_height * m_video_width * 4;
-        video_data.pts = m_av_frame_src->pts;
+        // video_data._data = new uint8_t[m_video_height * m_video_width * 4];
+        // video_data.size = m_video_height * m_video_width * 4;
+        video_data->size = av_image_get_buffer_size(AV_PIX_FMT_RGB32, m_video_width, m_video_height, 4);
+        video_data->_data = (uint8_t *)av_malloc(video_data->size);
+        memset(video_data->_data, 0, video_data->size);
+        video_data->pts = m_av_frame_src->pts;
         //初始化目的帧绑定数据缓冲
-        ret = av_image_fill_arrays(m_av_frame_dest->data, m_av_frame_dest->linesize, video_data._data, AV_PIX_FMT_RGB32, m_video_width, m_video_height, 4);
+        ret = av_image_fill_arrays(m_av_frame_dest->data, m_av_frame_dest->linesize, video_data->_data, AV_PIX_FMT_RGB32, m_video_width, m_video_height, 4);
         if (ret < 0)
         {
             m_logger->warn(std::string("绑定目的帧数据缓冲失败 ") + av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret));
             ret = -4;
+            delete video_data;
             goto END;
         }
 
@@ -230,8 +236,9 @@ int VideoDes::AVDecode()
         ret = sws_scale(m_video_sws_context, m_av_frame_src->data, m_av_frame_src->linesize, 0, m_video_height, m_av_frame_dest->data, m_av_frame_dest->linesize);
         if (ret < 0)
         {
-            m_logger->warn(std::string("视频格式数据转换，转码为RGB32失败 ") + av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret));
+            m_logger->warn(std::string("视频格式数据转换,转码为RGB32失败 ") + av_make_error_string(errbuf, AV_ERROR_MAX_STRING_SIZE, ret));
             ret = -5;
+            delete video_data;
             goto END;
         }
         //视频数据样式
@@ -247,7 +254,7 @@ int VideoDes::AVDecode()
 END:
     av_packet_unref(m_av_packet);
     av_frame_unref(m_av_frame_src);
-    av_frame_unref(m_av_frame_dest);
+    //av_frame_unref(m_av_frame_dest);
     if (ret == 0)
     {
         m_logger->info("提取视频数据成功");
@@ -261,12 +268,11 @@ END:
 
 VideoData *VideoDes::GetVideoData()
 {
-    if(queue_video_data.size()<=0)
+    if (queue_video_data.size() <= 0)
     {
         return nullptr;
     }
-    _VideoData video_data = new VideoData();
-    *video_data = queue_video_data.front();
+    _VideoData video_data = queue_video_data.front();
     queue_video_data.pop();
     return video_data;
 }

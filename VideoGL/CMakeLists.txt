@@ -6,8 +6,8 @@ target_sources( VideoGL
 PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/VideoGL.cpp
     VideoGL.h
-    # VideoExport.cpp
-    # VideoExport.h
+    VideoGLExport.cpp
+    VideoGLExport.h
 
 PRIVATE
     # glad.c库文件需要使用源码参与编译

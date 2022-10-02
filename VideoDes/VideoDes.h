@@ -1,5 +1,5 @@
-#ifndef _VIDEODES
-#define _VIDEODES
+#ifndef _VIDEO_DES_
+#define _VIDEO_DES_
 #pragma once
 
 //日志库
@@ -33,11 +33,25 @@ extern "C"
 #define MAX_QUEUE_SIZE 8
 
 /// @brief 视频解码后的视频结构体
-typedef struct
+typedef struct VideoData
 {
 	uint8_t *_data; // RGB图像数据
 	int64_t size;	// RGB图像数据大小
 	int64_t pts;	//视频显示时间
+	VideoData()
+	{
+		_data = nullptr;
+		size = 0;
+		pts = 0;
+	}
+	~VideoData()
+	{
+		if(_data)
+		{
+			av_free(_data);
+			_data = nullptr;
+		}
+	}
 } VideoData, *_VideoData;
 
 /// @brief 视频解码后的音频结构体
@@ -54,7 +68,6 @@ typedef struct
 /// </summary>
 class VideoDes
 {
-	///李佳 98年11月份
 public:
 	VideoDes();
 
@@ -145,7 +158,7 @@ private:
 	char errbuf[AV_ERROR_MAX_STRING_SIZE] = {0};
 
 	/// @brief 视频数据队列
-	std::queue<VideoData> queue_video_data;
+	std::queue<_VideoData> queue_video_data;
 
 	/// @brief 音频数据队列
 	std::queue<AudioData> queue_audio_data;

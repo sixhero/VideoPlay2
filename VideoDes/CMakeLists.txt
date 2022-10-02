@@ -6,8 +6,8 @@ target_sources( VideoDes
 PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/VideoDes.cpp
     VideoDes.h
-    VideoExport.cpp
-    VideoExport.h
+    VideoDesExport.cpp
+    VideoDesExport.h
 )
 if(WIN32)
     target_include_directories(VideoDes

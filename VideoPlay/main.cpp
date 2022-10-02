@@ -5,7 +5,13 @@
 #include <unistd.h>
 #endif
 
-#include "VideoExport.h"
+#include "VideoDesExport.h"
+#include "VideoGLExport.h"
+
+#ifndef STB_IMAGE_IMPLEMENTATION
+    #define STB_IMAGE_IMPLEMENTATION
+    #include "stb_image.h"
+#endif
 
 int main()
 {
@@ -18,6 +24,10 @@ int main()
 	int64_t pts_start;
 	int64_t pts_end;
 	int64_t pts;
+
+	//OpenGL模块
+	GLHandle gl_handle = CreatGLHandle();
+	InitGLHandele(gl_handle,width,height);
 	//获取第一帧视频
 	while (!AVHandleGetVideoData(av_handle, buff, &bufflen, &pts_start))
 	{
@@ -32,13 +42,17 @@ int main()
 	{
 		// AVHandleGetData(av_handle, buff, bufflen);
 
-		AVHandleGetVideoData(av_handle, buff, &bufflen, &pts_end);
-		pts = pts_end - pts_start;
+		//AVHandleGetVideoData(av_handle, buff, &bufflen, &pts_end);
+		//pts = pts_end - pts_start;
+		int width, height, nrChannels;
+    	buff = stbi_load("C:/Users/sixhero/Desktop/Wallpaper1920.jpg", &width, &height, &nrChannels, 0);
+
+		GLHandleShowVideo(gl_handle,width,height,buff);
 
 #ifdef __WIN32
 		if (pts > 0)
 		{
-			Sleep(pts);
+			//Sleep(pts-3);
 		}
 #elif __linux__
 		sleep(3);

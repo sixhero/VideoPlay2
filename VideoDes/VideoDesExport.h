@@ -1,19 +1,19 @@
-#ifndef _VIDEOEXPORT
-#define _VIDEOEXPORT
+#ifndef _VIDEO_DES_EXPORT_
+#define _VIDEO_DES_EXPORT_
 #pragma once
 #include <string>
 #ifdef WIN32
 #ifdef EXPORT_DEV
-#define API_EXPORT __declspec( dllexport )
+#define API_EXPORT __declspec(dllexport)
 #else
-#define API_EXPORT __declspec( dllimport )
+#define API_EXPORT __declspec(dllimport)
 #endif
 #else
-#define API_EXPORT 
+#define API_EXPORT
 #endif
 
- /// @brief 解码器句柄
-typedef void * AVHandle;
+/// @brief 解码器句柄
+typedef void *AVHandle;
 
 extern "C"
 {
@@ -38,13 +38,11 @@ extern "C"
 	int API_EXPORT GetAVHandleHeight(AVHandle av_handle);
 
 	/// @brief 获取队列缓存的视频数据
-	/// @param av_handle 
+	/// @param av_handle
 	/// @param databuff 数据缓冲，由调用者提供
 	/// @param bufflen 数据缓冲大小，由调用者提供
 	/// @return 是否成功获取到视频数据
-	bool API_EXPORT AVHandleGetVideoData(AVHandle av_handle, uint8_t* databuff, int64_t* bufflen,int64_t *pts);
-
-
+	bool API_EXPORT AVHandleGetVideoData(AVHandle av_handle, uint8_t *databuff, int64_t *bufflen, int64_t *pts);
 }
 
 #endif

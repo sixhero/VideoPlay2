@@ -1,5 +1,5 @@
 #define EXPORT_DEV
-#include "VideoExport.h"
+#include "VideoDesExport.h"
 #include "VideoDes.h"
 
 AVHandle API_EXPORT CreatAVHandle()
@@ -40,7 +40,6 @@ bool API_EXPORT AVHandleGetVideoData(AVHandle av_handle, uint8_t *databuff, int6
 	memcpy(databuff, video_data->_data, video_data->size);
 	*bufflen = video_data->size;
 	*pts = video_data->pts;
-	delete [] video_data->_data;
 	delete video_data;
 	return true;
 }
