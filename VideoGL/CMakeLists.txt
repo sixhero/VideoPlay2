@@ -28,7 +28,7 @@ if(WIN32)
         spdlog::spdlog_header_only
         glfw
     PRIVATE
-        opengl32.lib
+        # opengl32.lib
     )
 elseif(UNIX)
     target_include_directories(VideoGL
@@ -48,4 +48,3 @@ elseif(UNIX)
 
     )
 endif(WIN32)
-

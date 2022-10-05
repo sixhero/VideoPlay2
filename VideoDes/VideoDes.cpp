@@ -221,7 +221,8 @@ int VideoDes::AVDecode()
         video_data->size = av_image_get_buffer_size(AV_PIX_FMT_RGB32, m_video_width, m_video_height, 4);
         video_data->_data = (uint8_t *)av_malloc(video_data->size);
         memset(video_data->_data, 0, video_data->size);
-        video_data->pts = m_av_frame_src->pts;
+        //double a = av_q2d(m_av_format_context->streams[m_video_index]->time_base);
+        video_data->pts = 1000*m_av_frame_src->pts*av_q2d(m_av_format_context->streams[m_video_index]->time_base);
         //初始化目的帧绑定数据缓冲
         ret = av_image_fill_arrays(m_av_frame_dest->data, m_av_frame_dest->linesize, video_data->_data, AV_PIX_FMT_RGB32, m_video_width, m_video_height, 4);
         if (ret < 0)
@@ -270,6 +271,7 @@ VideoData *VideoDes::GetVideoData()
 {
     if (queue_video_data.size() <= 0)
     {
+        m_logger->info("获取数据失败");
         return nullptr;
     }
     _VideoData video_data = queue_video_data.front();
@@ -288,11 +290,7 @@ void VideoDes::Decoder()
         }
         else
         {
-#ifdef __WIN32
-            Sleep(5);
-#elif __linux__
-            sleep(5);
-#endif
+
         }
     }
 }

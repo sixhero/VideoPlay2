@@ -5,7 +5,7 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <glad/glad.h>
-#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 #include <stdint.h>
 #define STRING(x) #x
 #define SHADER(x) "" STRING(x)
@@ -49,6 +49,8 @@ private:
     //
     uint8_t *m_data = nullptr;
 
+    uint8_t *m_data_image = nullptr;
+
 
     // //VideoGL画面渲染线程
     // std::thread gl_thread;
@@ -81,6 +83,11 @@ private:
         1.0f,-1.0f,0.0f,       1.0f,1.0f,1.0f,     1.0f,1.0f, 
         -1.0f,-1.0f,0.0f,      1.0f,1.0f,1.0f,     0.0f,1.0f, 
         -1.0f,1.0f,0.0f,       1.0f,1.0f,1.0f,     0.0f,0.0f, 
+    };
+
+    const unsigned int indices[2*3] = {
+        0,1,3,
+		1,2,3
     };
 
     /// @brief 顶点着色器源码

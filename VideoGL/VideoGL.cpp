@@ -23,8 +23,6 @@ void VideoGL::setWidth(const uint64_t &width)
     m_width = width;
 }
 
-
-
 int VideoGL::InitVideoGL(const uint64_t &width,const uint64_t &height)
 {
     m_width = width;
@@ -35,7 +33,8 @@ int VideoGL::InitVideoGL(const uint64_t &width,const uint64_t &height)
     glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
 
     //初始化窗口
-    m_glfw_window = glfwCreateWindow(width,height,"VedioGL",NULL,NULL);
+    m_glfw_window = glfwCreateWindow(843,480,"VedioGL",NULL,NULL);
+    //m_glfw_window = glfwCreateWindow(width,height,"VedioGL",NULL,NULL);
 
     if(m_glfw_window == nullptr)
     {
@@ -55,7 +54,8 @@ int VideoGL::InitVideoGL(const uint64_t &width,const uint64_t &height)
     }
 
     //设置窗口的尺寸
-    glad_glViewport(0,0,width,height);
+    glad_glViewport(0,0,843,480);
+    //glad_glViewport(0,0,width,height);
 
     //生成纹理对象，第一个参数为数量，第二个参数为纹理对象数组，存放申请的纹理对象
     glad_glGenTextures(1,&m_texture_2D);
@@ -125,6 +125,10 @@ int VideoGL::InitVideoGL(const uint64_t &width,const uint64_t &height)
     //绑定顶点对象
     glad_glBindVertexArray(m_VAO);
 
+    //绑定元素缓冲对象，绘制的区域
+    glad_glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,m_EBO);
+    glad_glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(indices),indices,GL_STATIC_DRAW);
+
     //取出要渲染的顶点坐标区域
     glad_glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,8*sizeof(float),(void*)0);
     glad_glEnableVertexAttribArray(0);
@@ -135,12 +139,12 @@ int VideoGL::InitVideoGL(const uint64_t &width,const uint64_t &height)
 
     m_data = new uint8_t[m_width*m_height*4];
     memset(m_data,0,m_width*m_height*4);
-    return 0;
+    return 0;   
 }
 
 void VideoGL::VideoShow(const uint64_t &width,const uint64_t &height,const uint8_t* data)
 {
-    glad_glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,width,height,0,GL_RGB,GL_UNSIGNED_BYTE,data);
+    glad_glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,data);
 
     m_logger->info(std::string("渲染图像")+std::to_string(glad_glGetError()));
 
@@ -154,10 +158,8 @@ void VideoGL::VideoShow(const uint64_t &width,const uint64_t &height,const uint8
     glad_glBindVertexArray(m_VAO);
     glad_glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
 
-    
     glfwSwapBuffers(m_glfw_window);
     glfwPollEvents();
-
 }
 
 void VideoGL::ExitVideoGL()
@@ -180,12 +182,3 @@ uint8_t * VideoGL::getData()
 {
     return m_data;
 }
-
-// void VideoGL::GLShower()
-// {
-//     while (!glfwWindowShouldClose(m_glfw_window))
-//     {
-//         VideoShow(m_width,m_height,)
-//     }
-    
-// }
