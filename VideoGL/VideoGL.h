@@ -10,6 +10,12 @@
 #define STRING(x) #x
 #define SHADER(x) "" STRING(x)
 
+/// @brief 窗口信息回调函数
+/// @param window 窗口句柄
+/// @param width 宽度
+/// @param height 高度
+void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
+
 class VideoGL
 {
 public:
@@ -31,31 +37,33 @@ public:
     uint8_t * getData();
 
 
-    /// @brief 渲染图像视频的函数
+    /// @brief 渲染图像视频的函数，由于VideoDes设置转换的类型为RGB32,此处为2D纹理绑定的类型为GL_RGBA类型匹配
     /// @param width 数据宽度
     /// @param height 数据高度
     /// @param data 数据内存块
-    void VideoShow(const uint64_t &width,const uint64_t &height,const uint8_t* data);
+    /// @return 是否显示
+    bool VideoShow(const uint64_t &width,const uint64_t &height,const uint8_t* data);
     
 
 private:
 	/// @brief 快速日志句柄
 	std::shared_ptr<spdlog::logger> m_logger;
-    /// @brief glfw的窗口高度
+    /// @brief 渲染图像高度
     uint64_t m_height;
-    /// @brief glfw的窗口宽度
+    /// @brief 渲染图像的宽度
     uint64_t m_width;
 
-    //
+    /// @brief 存放RGBA数据进行渲染
     uint8_t *m_data = nullptr;
-
-    uint8_t *m_data_image = nullptr;
-
 
     // //VideoGL画面渲染线程
     // std::thread gl_thread;
 
     // void GLShower();
+    
+    /// @brief 处理GLFW窗口输入事件
+    /// @param window GLFW窗口句柄
+    void ProcessInput(GLFWwindow *window);
 
 
 private:
@@ -77,14 +85,14 @@ private:
     GLuint m_texture_2D;
 private:
     /// @brief 顶点渲染器坐标设置
-    const float vertices[4 * 8] = {
-        //渲染的位置            颜色                纹理坐标
-        1.0f,1.0f,0.0f,        1.0f,1.0f,1.0f,     1.0f,0.0f, 
-        1.0f,-1.0f,0.0f,       1.0f,1.0f,1.0f,     1.0f,1.0f, 
-        -1.0f,-1.0f,0.0f,      1.0f,1.0f,1.0f,     0.0f,1.0f, 
-        -1.0f,1.0f,0.0f,       1.0f,1.0f,1.0f,     0.0f,0.0f, 
+    const float vertices[4 * 5] = {
+        //渲染的位置                   纹理坐标
+        1.0f,1.0f,0.0f,             1.0f,0.0f, 
+        1.0f,-1.0f,0.0f,            1.0f,1.0f, 
+        -1.0f,-1.0f,0.0f,           0.0f,1.0f, 
+        -1.0f,1.0f,0.0f,            0.0f,0.0f, 
     };
-
+    /// @brief 绘制两个三角（合起来为矩形）的渲染区域
     const unsigned int indices[2*3] = {
         0,1,3,
 		1,2,3
@@ -94,16 +102,13 @@ private:
     const char* vertex_shader_source = (char *)SHADER(\
         #version 330 core\n
         layout(location = 0) in vec3 aPos;
-        layout(location = 1) in vec3 aColor;
-        layout(location = 2) in vec2 aTexCoord;
+        layout(location = 1) in vec2 aTexCoord;
 
-        out vec3 ourColor;
         out vec2 TexCoord;
 
         void main()
         {
             gl_Position = vec4(aPos, 1.0);
-            ourColor = aColor;
             TexCoord = aTexCoord;
         }
     );
@@ -112,7 +117,6 @@ private:
         #version 330 core\n
         out vec4 FragColor;
 
-        in vec3 ourColor;
         in vec2 TexCoord;
 
         uniform sampler2D ourTexture;

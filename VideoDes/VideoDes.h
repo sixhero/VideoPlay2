@@ -1,6 +1,5 @@
 #ifndef _VIDEO_DES_
 #define _VIDEO_DES_
-#pragma once
 
 //日志库
 #include <spdlog/spdlog.h>
@@ -17,14 +16,6 @@ extern "C"
 #include "libswscale/swscale.h"
 #include "libavutil/imgutils.h"
 };
-
-	// #pragma comment(lib,"avcodec.lib")
-	// #pragma comment(lib,"avdevice.lib")
-	// #pragma comment(lib,"avfilter.lib")
-	// #pragma comment(lib,"avformat.lib")
-	// #pragma comment(lib,"avutil.lib")
-	// #pragma comment(lib,"swresample.lib")
-	// #pragma comment(lib,"swscale.lib")
 
 #include <string>
 #include <queue>
