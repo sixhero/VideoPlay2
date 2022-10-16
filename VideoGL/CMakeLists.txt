@@ -7,7 +7,10 @@ PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/VideoGL.cpp
     VideoGL.h
     VideoGLExport.cpp
-    VideoGLExport.h
+
+PUBLIC
+    # 向外暴露使用的头文件
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/VideoGL/VideoGLExport.h
 
 PRIVATE
     # glad.c库文件需要使用源码参与编译
@@ -16,9 +19,9 @@ PRIVATE
 )
 if(WIN32)
     target_include_directories(VideoGL
-    INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
 
@@ -32,9 +35,9 @@ if(WIN32)
     )
 elseif(UNIX)
     target_include_directories(VideoGL
-    INTERFACE
-        ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
     )
 
@@ -45,6 +48,5 @@ elseif(UNIX)
         glfw
 
     PRIVATE
-
     )
 endif(WIN32)

@@ -7,12 +7,17 @@ PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/VideoDes.cpp
     VideoDes.h
     VideoDesExport.cpp
-    VideoDesExport.h
+
+PUBLIC
+    # 向外暴露使用的头文件
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/VideoDes/VideoDesExport.h
 )
 if(WIN32)
     target_include_directories(VideoDes
-    INTERFACE
+    PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/win/include
     )
@@ -32,8 +37,10 @@ if(WIN32)
     )
 elseif(UNIX)
     target_include_directories(VideoDes
-    INTERFACE
+    PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/linux/include
     )

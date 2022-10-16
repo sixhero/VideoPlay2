@@ -1,5 +1,5 @@
 #define EXPORT_DEV
-#include "VideoDesExport.h"
+#include "VideoDes/VideoDesExport.h"
 #include "VideoDes.h"
 
 AVHandle API_EXPORT CreatAVHandle()

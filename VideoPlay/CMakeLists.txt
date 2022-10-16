@@ -10,6 +10,4 @@ PRIVATE
     VideoDes
     VideoGL
     spdlog::spdlog_header_only
-
-
 )

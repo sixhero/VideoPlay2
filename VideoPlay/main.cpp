@@ -7,8 +7,8 @@
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include "VideoDesExport.h"
-#include "VideoGLExport.h"
+#include "VideoDes/VideoDesExport.h"
+#include "VideoGL/VideoGLExport.h"
 
 int main()
 {
@@ -18,13 +18,15 @@ int main()
     m_logger->info("VideoPlay对象初始化 ");
 
 	AVHandle av_handle = CreatAVHandle();
+
 	#ifdef __WIN32
-	int ret = InitAVHandle(av_handle, "D:/Download/阿拉涅的虫笼.mp4");
+	//int ret = InitAVHandle(av_handle, "D:/Download/阿拉涅的虫笼.mp4");
+	int ret = InitAVHandle(av_handle,"C:\\Users\\sixhero\\Desktop\\double tiger.mp3");
 	#else
 	//int ret = InitAVHandle(av_handle, "/home/sixhero/Downloads/Hole.mp4");
 	int ret = InitAVHandle(av_handle, "/home/sixhero/Downloads/AlaNie.mp4");
-
 	#endif
+
 	int width = GetAVHandleWidth(av_handle);
 	int height = GetAVHandleHeight(av_handle);
 	uint8_t *buff = new uint8_t[width * height * 4];
@@ -62,10 +64,7 @@ int main()
 		}
 
 #ifdef __WIN32
-		if (pts > 0)
-		{
-			//Sleep(pts-3);
-		}
+		Sleep(pts);
 #elif __linux__
 		//睡眠微妙（秒，1000×毫秒，1000×微妙）
 		usleep(pts*1000-2000);//正常应该减去程序运行的耗时，暂时未作

@@ -98,7 +98,6 @@ private:
 		1,2,3
     };
 
-    /// @brief 顶点着色器源码
     const char* vertex_shader_source = (char *)SHADER(\
         #version 330 core\n
         layout(location = 0) in vec3 aPos;

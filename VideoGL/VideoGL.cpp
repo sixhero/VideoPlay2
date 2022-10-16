@@ -36,7 +36,7 @@ int VideoGL::InitVideoGL(const uint64_t &width, const uint64_t &height)
 {
     m_width = width;
     m_height = height;
-    glfwInit();
+    int state = glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);

@@ -4,3 +4,6 @@
 [submodule "module/glfw"]
 	path = module/glfw
 	url = https://github.com/glfw/glfw.git
+[submodule "module/miniaudio"]
+	path = module/miniaudio
+	url = https://github.com/mackron/miniaudio.git

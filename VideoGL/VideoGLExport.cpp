@@ -1,5 +1,5 @@
 #define EXPORT_DEV
-#include "VideoGLExport.h"
+#include "VideoGL/VideoGLExport.h"
 #include "VideoGL.h"
 
 GLHandle API_EXPORT CreatGLHandle()

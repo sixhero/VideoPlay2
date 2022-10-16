@@ -13,3 +13,8 @@ add_subdirectory(VideoDes)
 add_subdirectory(VideoPlay)
 #OpenGL的视频展示器
 add_subdirectory(VideoGL)
+#使用miniaudio的音频播放库
+add_subdirectory(AudioMini)
+
+#测试使用的代码
+add_subdirectory(Test)
